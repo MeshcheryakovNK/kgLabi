@@ -25,7 +25,7 @@ private:
 public:
     Rasterizer(int width, int height);
 
-    void render(const Mesh& mesh, IShader& shader);
+    void render(const Mesh& mesh, IShader& shader, uint8_t opacity = 255);
     bool MakePNG(const std::string& path) const;
 
     const Image& image() const 

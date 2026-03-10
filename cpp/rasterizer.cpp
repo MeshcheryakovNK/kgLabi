@@ -26,10 +26,10 @@ Vec3f Rasterizer::barycentric(const std::array<float, 2>& a, const std::array<fl
     return { 1.f - u_coord - v_coord, u_coord, v_coord };
 }
 
-void Rasterizer::render(const Mesh& model, IShader& shader) 
+void Rasterizer::render(const Mesh& model, IShader& shader, uint8_t opacity) 
 {
-    colorBuffer.clear({ 0.f, 0.f, 0.f });
-    std::fill(zBuffer.begin(), zBuffer.end(), std::numeric_limits<float>::infinity());
+    //colorBuffer.clear({ 0.f, 0.f, 0.f });
+    //std::fill(zBuffer.begin(), zBuffer.end(), std::numeric_limits<float>::infinity());
 
     int width = colorBuffer.getWidth();
     int height = colorBuffer.getHeight();
@@ -79,8 +79,11 @@ void Rasterizer::render(const Mesh& model, IShader& shader)
                 if (depth < zBuffer[index]) 
                 {
                     Vec3f color = shader.fragment(bary, { verts[0].payLoad, verts[1].payLoad, verts[2].payLoad });
-                    colorBuffer.setPixelColor(x, y, color);
-                    zBuffer[index] = depth;
+                    colorBuffer.setPixelColor(x, y, color, opacity);
+                    if (opacity == 255)
+                    {
+                        zBuffer[index] = depth;
+                    }
                 }
             }
         }
